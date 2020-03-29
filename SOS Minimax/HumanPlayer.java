@@ -5,13 +5,11 @@ public class HumanPlayer
 {
 
     private String name;//Player name 
-    private int points;//Player points
 
     public HumanPlayer(String name)
     {
         //Initiate player
         this.name = name;
-        points = 0;
     }
 
     public boolean play(Grid grid)
@@ -38,7 +36,7 @@ public class HumanPlayer
                 }
 
                 //Make move
-                moveResult = grid.put("user", row - 1, col - 1, move);
+                moveResult = grid.put("human", row - 1, col - 1, move);
 
                 //If move is not valid raise InputMismatchException
                 if(!moveResult)
@@ -46,14 +44,13 @@ public class HumanPlayer
                     throw  new InputMismatchException();
                 }
 
-                //Check for points
-                int pointsAquired = checkForPoins(row - 1, col - 1, grid);
-                points += pointsAquired;
+                //Check for SOS sequences
+                int numberOfSequences = isWinningMove(row - 1, col - 1, grid);
 
-                //If points are earned
-                if(pointsAquired != 0)
+                //If sequences are found
+                if(numberOfSequences != 0)
                 {
-                    return true;//Player replays
+                    return true;//Player wins
                 }
             }
             catch (InputMismatchException e)//If coordinates and/or symbol are invalid
@@ -63,7 +60,7 @@ public class HumanPlayer
         }
         while(!moveResult);
 
-        //If reached here player has played, not earned points and does not replay
+        //If reached here player has played, not created sequences and does not win
         return false;
     }
 
@@ -72,13 +69,8 @@ public class HumanPlayer
         return name;
     }
 
-    public int getPoints()
-    {
-        return points;
-    }
-
-    //Check if points are earned by placing in [row, col]
-    private int checkForPoins(int row, int col, Grid grid)
+    //Check if sequences are created by placing in [row, col]
+    private int isWinningMove(int row, int col, Grid grid)
     {
         String[][] gridStringArray = grid.getGrid();
         int score = 0;
@@ -113,7 +105,7 @@ public class HumanPlayer
             }
         }
 
-        //Add up SOS points
+        //Add up SOS sequences
         if(rowWord.equals("SOS"))
         {
             score++;
@@ -131,7 +123,7 @@ public class HumanPlayer
             score++;
         }
 
-        //Return points earned
+        //Return sequences created
         return score;
     }
 }

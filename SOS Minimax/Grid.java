@@ -33,7 +33,7 @@ public class Grid
     public boolean put(String player, int row, int col, String move)
     {
         //If HumanPlayer is playing check for coordinates validity
-        if(player.equals("user"))
+        if(player.equals("human"))
         {
             if(row < 0 || col < 0 || row > 2 || col > 2)
             {
@@ -80,7 +80,7 @@ public class Grid
     //Print the grid
     public void print()
     {
-        System.out.println("   -1-2-3-");
+        System.out.println("\n   -1-2-3-");
         for(int row = 0; row < 3; row++)
         {
             System.out.print((row+1)+" | ");

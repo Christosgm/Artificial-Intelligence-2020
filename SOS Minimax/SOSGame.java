@@ -62,7 +62,7 @@ public class SOSGame
             }
         }
 
-        //if command is exit or help the length can only be 1
+        //If command is exit or help the length can only be 1
         if((commands[0].equals("exit")  || commands[0].equals("help")) && commands.length != 1)
         {
             return false;
@@ -74,14 +74,19 @@ public class SOSGame
     private static void printHelp()
     {
         System.out.println(
-                "\nPlayers take turns to add either an \"S\" or an \"O\" to any square, with no requirement to use the same letter each turn.\n" +
-                "The object of the game is for each player to attempt to create the straight sequence S-O-S among connected squares \n" +
-                "(either diagonally, horizontally, or vertically), and to create as many such sequences as they can. If a player succeeds\n" +
-                "in creating an SOS, that player immediately takes another turn, and continues to do so until no SOS can be created on their turn.\n\n" +
+                "\nGAME RULES\n" +
+                "Players take turns to add either an \"S\" or an \"O\" to any square,\n" + 
+                "with no requirement to use the same letter each turn.\n\n" + 
+                "The object of the game is for each player to attempt to create the\n" + 
+                "straight sequence S-O-S among connected squares either diagonally,\n" + 
+                "horizontally, or vertically.\n\n" + 
+                "If a player succeeds in creating a SOS, he is declared the winner.\n\n" +
+                "If the board fills, without any SOS then the game is considered a draw.\n\n" +
                 
                 "VALID COMMANDS\n" +
                 "start <name_of_p1> <name_of_p2> : Starts a game with <name_of_p1> being the first player.\n"+
-                "                                  If minimax is used then CPU is selected as player.\n" +
+                "                                  If minimax is used as a name then the computer plays\n" + 
+                "                                  using the minimax algorithm.\n" +
                 "exit : Exits the program.\n" +
                 "help : Shows info.\n"
         );
@@ -110,44 +115,38 @@ public class SOSGame
             Grid grid = new Grid();
 
             int turn = 1;
-            while(!grid.isTerminalState())//While game is not finished
+            String winner = "";
+
+            while(!grid.isTerminalState() && winner.equals(""))//While game is not a draw or there is not a winner
             {
-                System.out.printf("\n%s points: %d\n%s points: %d\n\n", player1.getName(), player1.getPoints(), player2.getName(), player2.getPoints());
                 grid.print();//Print grid
                 if(turn%2 == 1)//If it is player 1 turn
                 {
                     System.out.println(player1.getName() + " play!\n");
-                    if(player1.play(grid))//Play and if player 1 replays
+                    if(player1.play(grid))//Play and if player 1 wins
                     {
-                        turn++;
+                        winner = player1.getName();
                     }
                 }
                 else //Else it is player 2 turn
                 {
                     System.out.println(player2.getName() + " play!");
-                    if(player2.play(grid))//Play and if player 2 replays
+                    if(player2.play(grid))//Play and if player 2 wins
                     {
-                        turn++;
+                        winner = player2.getName();
                     }
                 }
                 turn++;
             }
-
-            System.out.printf("\n%s points: %d\n%s points: %d\n\n", player1.getName(), player1.getPoints(), player2.getName(), player2.getPoints());
-            grid.print();
-
-            //Decide winner
-            if(player1.getPoints() > player2.getPoints())
+ 			
+ 			grid.print();
+            if(winner.equals(""))
             {
-                System.out.println(player1.getName() + " wins with " + player1.getPoints() + " points!");
-            }
-            else if(player2.getPoints() > player1.getPoints())
-            {
-                System.out.println(player2.getName() + " wins with " + player2.getPoints() + " points!");
+                System.out.println("Draw!");
             }
             else
             {
-                System.out.println("Draw!");
+                System.out.println(winner + " wins!");
             }
 
         }
