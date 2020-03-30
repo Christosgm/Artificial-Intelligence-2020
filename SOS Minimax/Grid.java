@@ -52,7 +52,7 @@ public class Grid
         return true;
     }
 
-    public boolean isTerminalState()
+    public boolean isDraw()
     {
         //If grid is full, then the game is over.
         int countNonBlank = 0;

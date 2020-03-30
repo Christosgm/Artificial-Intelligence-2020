@@ -1,12 +1,14 @@
-import java.io.IOException;
+import java.io.*;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class SOSGame
 {
-    private static void clrScr() throws IOException, InterruptedException
+    private static void clrScr()
     {
-            final String os = System.getProperty("os.name");
+        try
+        {
+            String os = System.getProperty("os.name");
 
             if (os.contains("Windows"))
             {
@@ -14,12 +16,17 @@ public class SOSGame
             }
             else
             {
-                Runtime.getRuntime().exec("clear");
+                System.out.print("\033[H\033[2J");
+                System.out.flush();
             }
+        }
+        catch(IOException | InterruptedException e)
+        {
+        }
     }
 
 	//Enter the command to do stuff
-    private static String[] enterCommand() throws IOException, InterruptedException
+    private static String[] enterCommand()
     {
         String[] commands = null;
         //Ends when the command given is valid
@@ -107,7 +114,7 @@ public class SOSGame
         );
     }
 
-    public static void main(String[] args) throws IOException, InterruptedException
+    public static void main(String[] args)
     {
         String[] commands;
         clrScr();
@@ -159,7 +166,7 @@ public class SOSGame
             }
 
             clrScr();
-            System.out.println("  -TURN #" + turn + "-");
+            System.out.println("  -TURN #" + (turn-1) + "-");
             grid.print();
             if(winner.equals(""))
             {
