@@ -4,8 +4,22 @@ import java.util.Scanner;
 
 public class SOSGame
 {
+    private static void clrScr() throws IOException, InterruptedException
+    {
+            final String os = System.getProperty("os.name");
+
+            if (os.contains("Windows"))
+            {
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            }
+            else
+            {
+                Runtime.getRuntime().exec("clear");
+            }
+    }
+
 	//Enter the command to do stuff
-    private static String[] enterCommand()
+    private static String[] enterCommand() throws IOException, InterruptedException
     {
         String[] commands = null;
         //Ends when the command given is valid
@@ -27,6 +41,7 @@ public class SOSGame
                 //If command is help print guide
                 if(commands[0].equals("help"))
                 {
+                    clrScr();
                     printHelp();
                 }
             }
@@ -92,9 +107,10 @@ public class SOSGame
         );
     }
 
-    public static void main(String[] args)
+    public static void main(String[] args) throws IOException, InterruptedException
     {
         String[] commands;
+        clrScr();
 
         //Ends if command is exit
         do
@@ -110,15 +126,18 @@ public class SOSGame
             }
 
             //Create players and grid
-            HumanPlayer player1 = new HumanPlayer(commands[1]);
-            HumanPlayer player2 = new HumanPlayer(commands[2]);
+            PlayerFactory playerFactory = new PlayerFactory();
+            Player player1 = playerFactory.createPlayer(commands[1]);
+            Player player2 = playerFactory.createPlayer(commands[2]);
             Grid grid = new Grid();
 
             int turn = 1;
             String winner = "";
 
-            while(!grid.isTerminalState() && winner.equals(""))//While game is not a draw or there is not a winner
+            while(!grid.isDraw() && winner.equals(""))//While game is not a draw or there is not a winner
             {
+                clrScr();
+                System.out.println("  -TURN #" + turn + "-");
                 grid.print();//Print grid
                 if(turn%2 == 1)//If it is player 1 turn
                 {
@@ -130,7 +149,7 @@ public class SOSGame
                 }
                 else //Else it is player 2 turn
                 {
-                    System.out.println(player2.getName() + " play!");
+                    System.out.println(player2.getName() + " play!\n");
                     if(player2.play(grid))//Play and if player 2 wins
                     {
                         winner = player2.getName();
@@ -138,15 +157,17 @@ public class SOSGame
                 }
                 turn++;
             }
- 			
- 			grid.print();
+
+            clrScr();
+            System.out.println("  -TURN #" + turn + "-");
+            grid.print();
             if(winner.equals(""))
             {
-                System.out.println("Draw!");
+                System.out.println("Draw!\n");
             }
             else
             {
-                System.out.println(winner + " wins!");
+                System.out.println(winner + " wins!\n");
             }
 
         }

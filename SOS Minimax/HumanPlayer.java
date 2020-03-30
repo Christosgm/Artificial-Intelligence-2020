@@ -1,17 +1,14 @@
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class HumanPlayer
+public class HumanPlayer extends Player
 {
-
-    private String name;//Player name 
-
     public HumanPlayer(String name)
     {
-        //Initiate player
-        this.name = name;
+        super(name);
     }
 
+    @Override
     public boolean play(Grid grid)
     {
         boolean moveResult = false;
@@ -62,68 +59,5 @@ public class HumanPlayer
 
         //If reached here player has played, not created sequences and does not win
         return false;
-    }
-
-    public String getName()
-    {
-        return name;
-    }
-
-    //Check if sequences are created by placing in [row, col]
-    private int isWinningMove(int row, int col, Grid grid)
-    {
-        String[][] gridStringArray = grid.getGrid();
-        int score = 0;
-
-        String rowWord = "";
-        String colWord = "";
-        String diag1Word = "";
-        String diag2Word = "";
-
-        //Check the row and column of the coordinate
-        for(int i = 0; i < gridStringArray.length; i++)
-        {
-            rowWord += gridStringArray[i][col];
-            colWord += gridStringArray[row][i];
-        }
-
-        //If coordinate is in main diagonal check it
-        if((row == col))
-        {
-            for(int i = 0; i < gridStringArray.length; i++)
-            {
-                diag1Word += gridStringArray[i][i];
-            }
-        }
-
-        //If coordinate is in secondary diagonal check it
-        if(row + col == 2)
-        {
-            for(int i = 0; i < gridStringArray.length; i++)
-            {
-                diag2Word += gridStringArray[i][2 - i];
-            }
-        }
-
-        //Add up SOS sequences
-        if(rowWord.equals("SOS"))
-        {
-            score++;
-        }
-        if(colWord.equals("SOS"))
-        {
-            score++;
-        }
-        if(diag1Word.equals("SOS"))
-        {
-            score++;
-        }
-        if(diag2Word.equals("SOS"))
-        {
-            score++;
-        }
-
-        //Return sequences created
-        return score;
     }
 }
