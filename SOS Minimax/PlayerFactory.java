@@ -3,7 +3,7 @@ public class PlayerFactory
     //Create player based on name
     public Player createPlayer(String name)
     {
-        if(!name.equals("minimax"))
+        if(!name.equals("minimax") && ! name.equals("cpu"))
         {
             return new HumanPlayer(name);
         }

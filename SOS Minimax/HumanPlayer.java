@@ -23,11 +23,11 @@ public class HumanPlayer extends Player
                 Scanner input = new Scanner(System.in);
                 int row = input.nextInt();
                 int col = input.nextInt();
-                String move;
-                move = input.next();
+                char move;
+                move = input.next().charAt(0);
 
                 //If symbol is not valid raise InputMismatchException
-                if(!move.equals("S") && !move.equals("O"))
+                if(move!='S' && move!='O')
                 {
                     throw new InputMismatchException();
                 }
@@ -42,10 +42,10 @@ public class HumanPlayer extends Player
                 }
 
                 //Check for SOS sequences
-                int numberOfSequences = isWinningMove(row - 1, col - 1, grid);
+                //int numberOfSequences = isWinningMove(row - 1, col - 1, grid);
 
-                //If sequences are found
-                if(numberOfSequences != 0)
+                //If grid finds a winner
+                if(grid.someoneHasWon())
                 {
                     return true;//Player wins
                 }

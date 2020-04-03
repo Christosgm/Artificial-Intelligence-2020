@@ -2,17 +2,17 @@ import java.util.Random;
 
 public class Grid
 {
-    private String[][] grid;
+    private char[][] grid;
 
     public Grid()
     {
         //Initiate the grid
-        grid = new String[3][3];
+        grid = new char[3][3];
         for(int row = 0; row < 3; row++)
         {
             for(int col = 0; col < 3; col++)
             {
-                grid[row][col] = " ";
+                grid[row][col] = ' ';
             }
         }
 
@@ -21,16 +21,28 @@ public class Grid
         int startingPosition = random.nextInt()%2;
         if(startingPosition == 0)
         {
-            grid[1][0] = "O";
+            grid[1][0] = 'O';
         }
         else
         {
-            grid[1][2] = "O";
+            grid[1][2] = 'O';
         }
 
     }
 
-    public boolean put(String player, int row, int col, String move)
+    public Grid(char[][] grid)
+    {
+        this.grid = new char[3][3];
+        for(int i = 0; i < grid.length; i++)
+        {
+            for(int j = 0; j < grid.length; j++)
+            {
+                this.grid[i][j] = grid[i][j];
+            }
+        }
+    }
+
+    public boolean put(String player, int row, int col, char move)
     {
         //If HumanPlayer is playing check for coordinates validity
         if(player.equals("human"))
@@ -42,7 +54,7 @@ public class Grid
         }
 
         //If cell is full, you can't put symbol inside 
-        if(!grid[row][col].equals(" "))
+        if(grid[row][col] != ' ')
         {
             return false;
         }
@@ -54,26 +66,57 @@ public class Grid
 
     public boolean isDraw()
     {
-        //If grid is full, then the game is over.
         int countNonBlank = 0;
         for(int i = 0; i < 3; i++)
         {
             for(int j = 0; j < 3; j++)
             {
-                if(!grid[i][j].equals(" "))
+                if(grid[i][j] != ' ')
                 {
                     countNonBlank++;
                 }
             }
         }
 
-        return countNonBlank == 9;
+        return !someoneHasWon() && countNonBlank == 9; //If grid is full, then the game is a draw.
     }
 
     //Return the grid
-    public String[][] getGrid()
+    public char[][] getGrid()
     {
         return grid;
+    }
+
+    //Check if someone has won
+    public boolean someoneHasWon()
+    {
+
+        //Check rows and columns of the grid
+        for(int i = 0; i < grid.length; i++)
+        {
+            StringBuilder rowSequence = new StringBuilder();
+            StringBuilder colSequence = new StringBuilder();
+           for(int j = 0; j < grid.length; j++)
+           {
+               rowSequence.append(grid[i][j]);
+               colSequence.append(grid[j][i]);
+           }
+           if(rowSequence.toString().equals("SOS") || colSequence.toString().equals("SOS"))
+           {
+               return true;
+           }
+        }
+
+        StringBuilder diag1Sequence = new StringBuilder();
+        StringBuilder diag2Sequence = new StringBuilder();
+        //Check diagonals
+        for(int i = 0; i < grid.length; i++)
+        {
+            diag1Sequence.append(grid[i][i]);
+            diag2Sequence.append(grid[i][2 - i]);
+        }
+
+        return diag1Sequence.toString().equals("SOS") || diag2Sequence.toString().equals("SOS");
     }
 
 
