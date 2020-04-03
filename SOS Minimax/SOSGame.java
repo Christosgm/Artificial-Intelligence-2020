@@ -1,129 +1,43 @@
-import java.io.*;
-import java.util.InputMismatchException;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class SOSGame
 {
-    private static void clrScr()
+    //Create flow to watch computer play
+    private static void stopFlow(String name)
     {
-        try
+        if(name.equals("minimax") || name.equals("cpu"))
         {
-            String os = System.getProperty("os.name");
-
-            if (os.contains("Windows"))
-            {
-                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-            }
-            else
-            {
-                System.out.print("\033[H\033[2J");
-                System.out.flush();
-            }
-        }
-        catch(IOException | InterruptedException e)
-        {
+            System.out.println("<---PRESS ENTER TO CONTINUE--->");
+            Scanner input = new Scanner(System.in);
+            input.nextLine();
         }
     }
 
-	//Enter the command to do stuff
-    private static String[] enterCommand()
+    private static String play(Player player, Grid grid)
     {
-        String[] commands = null;
-        //Ends when the command given is valid
-        do
+        System.out.println(player.getName() + " play!");
+
+        grid.print();//Print grid
+        if(player.play(grid))//Play and if player 2 wins
         {
-            try
-            {
-            	//Enter the command
-                System.out.print("Input command(type help for info): ");
-                Scanner input = new Scanner(System.in);
-                commands = input.nextLine().split(" ");
-
-                //Check for validity and if not valid raise InputMismatchException
-                if(!checkParams(commands))
-                {
-                    throw new InputMismatchException();
-                }
-
-                //If command is help print guide
-                if(commands[0].equals("help"))
-                {
-                    clrScr();
-                    printHelp();
-                }
-            }
-            catch (InputMismatchException e)//If command is not valid
-            {
-                System.out.println("Invalid command!");
-            }
+            return player.getName();
         }
-        while(!checkParams(commands) || commands[0].equals("help"));//When help is chosen we need to enter a new command 
-        return commands;
+        stopFlow(player.getName());
+        return "";
     }
 
-    private static boolean checkParams(String[] commands)
+    public static void main(String[] args) throws IOException, InterruptedException
     {
-    	//Command length can be 1 or 3
-        if(commands.length != 3 && commands.length != 1)
-        {
-            return false;
-        }
-
-        //First arg can only be start, exit or help
-        if(!commands[0].equals("start")  && !commands[0].equals("exit")  && !commands[0].equals("help"))
-        {
-            return false;
-        }
-
-        //The other arguments cannot be keywords
-        for(int i = 1; i < commands.length; i++)
-        {
-            if(commands[i].equals("start") || commands[i].equals("exit") || commands[i].equals("help"))
-            {
-                return false;
-            }
-        }
-
-        //If command is exit or help the length can only be 1
-        if((commands[0].equals("exit")  || commands[0].equals("help")) && commands.length != 1)
-        {
-            return false;
-        }
-
-        return true;
-    }
-
-    private static void printHelp()
-    {
-        System.out.println(
-                "\nGAME RULES\n" +
-                "Players take turns to add either an \"S\" or an \"O\" to any square,\n" + 
-                "with no requirement to use the same letter each turn.\n\n" + 
-                "The object of the game is for each player to attempt to create the\n" + 
-                "straight sequence S-O-S among connected squares either diagonally,\n" + 
-                "horizontally, or vertically.\n\n" + 
-                "If a player succeeds in creating a SOS, he is declared the winner.\n\n" +
-                "If the board fills, without any SOS then the game is considered a draw.\n\n" +
-                
-                "VALID COMMANDS\n" +
-                "start <name_of_p1> <name_of_p2> : Starts a game with <name_of_p1> being the first player.\n"+
-                "                                  If minimax is used as a name then the computer plays\n" + 
-                "                                  using the minimax algorithm.\n" +
-                "exit : Exits the program.\n" +
-                "help : Shows info.\n"
-        );
-    }
-
-    public static void main(String[] args)
-    {
+        Menu menu = new Menu();
         String[] commands;
-        clrScr();
+        menu.clrScr();
 
         //Ends if command is exit
         do
         {
         	//Enter command
-            commands = enterCommand();
+            commands = menu.enterCommand();
 
             //If command is exit terminate
             if(commands[0].equals("exit"))
@@ -136,37 +50,29 @@ public class SOSGame
             PlayerFactory playerFactory = new PlayerFactory();
             Player player1 = playerFactory.createPlayer(commands[1]);
             Player player2 = playerFactory.createPlayer(commands[2]);
+
             Grid grid = new Grid();
 
             int turn = 1;
             String winner = "";
 
-            while(!grid.isDraw() && winner.equals(""))//While game is not a draw or there is not a winner
+            while(!grid.isDraw() && !grid.someoneHasWon())//While game is not a draw or there is not a winner
             {
-                clrScr();
+                menu.clrScr();
                 System.out.println("  -TURN #" + turn + "-");
-                grid.print();//Print grid
                 if(turn%2 == 1)//If it is player 1 turn
                 {
-                    System.out.println(player1.getName() + " play!\n");
-                    if(player1.play(grid))//Play and if player 1 wins
-                    {
-                        winner = player1.getName();
-                    }
+                    winner = play(player1, grid);
                 }
                 else //Else it is player 2 turn
                 {
-                    System.out.println(player2.getName() + " play!\n");
-                    if(player2.play(grid))//Play and if player 2 wins
-                    {
-                        winner = player2.getName();
-                    }
+                    winner = play(player2, grid);
                 }
                 turn++;
             }
 
-            clrScr();
-            System.out.println("  -TURN #" + (turn-1) + "-");
+            menu.clrScr();
+            System.out.println("  -TURN #" + (turn - 1) + "-");
             grid.print();
             if(winner.equals(""))
             {
