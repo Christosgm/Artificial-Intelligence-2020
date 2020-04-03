@@ -110,7 +110,7 @@ public class MiniMax
         //If the game is in a terminal state or has reached the desired depth
         boolean someoneWon = state.grid.someoneHasWon();
         boolean isDraw =  state.grid.isDraw();
-        if(someoneWon || isDraw || depth == 3)
+        if(someoneWon || isDraw)
         {
             return evaluateState(someoneWon, isDraw, !isMaximizer);//Evaluate the state
         }
@@ -122,7 +122,7 @@ public class MiniMax
             state.findChildren();
             for(int i = 0; i < state.children.size(); i++)
             {
-                Node child = state.children.get(i);
+                Node child = state.children.remove(i);
                 int score = minimax(child, depth + 1, false);
                 bestScore = Math.max(bestScore, score);
             }
@@ -135,7 +135,7 @@ public class MiniMax
             state.findChildren();
             for(int i = 0; i < state.children.size(); i++)
             {
-                Node child = state.children.get(i);
+                Node child = state.children.remove(i);
                 int score = minimax(child, depth + 1, true);
                 bestScore = Math.min(bestScore, score);
             }
