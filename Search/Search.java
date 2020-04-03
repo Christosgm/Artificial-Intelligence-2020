@@ -98,7 +98,7 @@ class Search{
     private Node extractMin(ArrayList<Node> listOfNodes){
         Node min = listOfNodes.get(0);
         for (Node node: listOfNodes){
-            if (node.getCurrentCost()< min.getCurrentCost())
+            if (node.getNodeG()< min.getNodeG())
                 min = node;
         }
         listOfNodes.remove(min);
@@ -114,11 +114,11 @@ class Search{
         int rightIndex = emptyIndex;
         for (int i = 1; i <= whiteBalls; i++){
             if (--leftIndex >= 0 ) children.add(new Node(swapLetters(
-            parent.getCurrentOutput(),leftIndex,emptyIndex),leftIndex+
+            parent.getCurrentOutput(),leftIndex,emptyIndex),emptyIndex-leftIndex+
             parent.getNodeG(),parent));
             if (++rightIndex < parent.getCurrentOutput().length())
                 children.add(new Node(swapLetters(parent.getCurrentOutput(),
-                emptyIndex,rightIndex),rightIndex+parent.getNodeG(),parent));
+                emptyIndex,rightIndex),rightIndex-emptyIndex+parent.getNodeG(),parent));
         }
         if (mode == 1)
             for (Node child:children)
@@ -139,7 +139,7 @@ class Search{
             if ( i < whiteBalls && currentSequence.charAt(i) != 'M')
                 extraValue += whiteBalls - i;
             else if (currentSequence.charAt(i) == 'M')
-                extraValue += i - whiteBalls ;
+                extraValue += i - whiteBalls -1;
         return extraValue;
     }
 
