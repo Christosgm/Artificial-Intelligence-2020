@@ -61,9 +61,23 @@ class Search{
                 randomStart();
             }else{
                 startingSequence = input.nextLine();
+                countLetters();
                 whiteBalls = startingSequence.length()/2;
             }
-        }while (!startingSequence.matches("[AM]*-[AM]*"));
+        }while (!startingSequence.matches("[AM]*-[AM]*") || !countLetters());
+    }
+
+    private boolean countLetters(){
+        Pattern letterM = Pattern.compile("M");
+        Pattern letterA = Pattern.compile("A");
+        Matcher matcherForM = letterM.matcher(startingSequence);
+        Matcher matcherForA = letterA.matcher(startingSequence);
+        int countA = 0; int countM = 0;
+        while (matcherForA.find())
+            countA++;
+        while (matcherForM.find())
+            countM++;
+        return countM == countA;
     }
 
     // Creates a random starting sequence of given size
@@ -98,7 +112,7 @@ class Search{
     private Node extractMin(ArrayList<Node> listOfNodes){
         Node min = listOfNodes.get(0);
         for (Node node: listOfNodes){
-            if (node.getNodeG()< min.getNodeG())
+            if (node.getCurrentCost()< min.getCurrentCost())
                 min = node;
         }
         listOfNodes.remove(min);
