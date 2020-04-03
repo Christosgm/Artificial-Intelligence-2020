@@ -52,7 +52,8 @@ public class Menu
         }
         else
         {
-            Runtime.getRuntime().exec("clear");//Clear screen on other Systems
+            System.out.print("\033[H\033[2J");//Clear screen on other Systems
+            System.out.flush();
         }
     }
 
