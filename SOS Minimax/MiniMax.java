@@ -14,7 +14,7 @@ public class MiniMax
         }
 
         //Find all possible next moves
-        public void findChildren()
+        public void findNextMoves()
         {
             char[][] board = grid.getGrid();
             for(int i = 0; i < board.length; i++)
@@ -67,7 +67,7 @@ public class MiniMax
         char[] position = {' ', ' ', ' '};
 
         //Find possible next moves
-        state.findChildren();
+        state.findNextMoves();
 
         //For every possible next move
         for(int i = 0; i < state.children.size(); i++)
@@ -119,7 +119,7 @@ public class MiniMax
         {
             //Find maximum score of all possible state's scores
             int bestScore = Integer.MIN_VALUE;
-            state.findChildren();
+            state.findNextMoves();
             for(int i = 0; i < state.children.size(); i++)
             {
                 Node child = state.children.remove(i);
@@ -132,7 +132,7 @@ public class MiniMax
         {
             //Find minimum score of all possible move's scores
             int bestScore = Integer.MAX_VALUE;
-            state.findChildren();
+            state.findNextMoves();
             for(int i = 0; i < state.children.size(); i++)
             {
                 Node child = state.children.remove(i);

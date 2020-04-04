@@ -7,6 +7,6 @@ public class PlayerFactory
         {
             return new HumanPlayer(name);
         }
-        return new ComputerPlayer(name);//If minimax is the name then computer player is created
+        return new ComputerPlayer(name);//If minimax or cpu is the name then computer player is created
     }
 }

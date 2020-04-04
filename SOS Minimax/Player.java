@@ -13,5 +13,5 @@ public abstract class Player
         return name;
     }
 
-    abstract boolean play(Grid grid);
+    abstract boolean play(Grid grid);//Returns true if the move played is a winning move
 }

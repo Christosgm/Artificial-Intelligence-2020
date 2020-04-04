@@ -87,7 +87,7 @@ public class Menu
     private void printHelp()
     {
         System.out.println(
-                "\nGAME RULES\n" +
+                        "\nGAME RULES\n" +
                         "Players take turns to add either an \"S\" or an \"O\" to any square,\n" +
                         "with no requirement to use the same letter each turn.\n\n" +
                         "The object of the game is for each player to attempt to create the\n" +

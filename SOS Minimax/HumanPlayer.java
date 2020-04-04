@@ -8,6 +8,7 @@ public class HumanPlayer extends Player
         super(name);
     }
 
+    //Returns true if the move played is a winning move
     @Override
     public boolean play(Grid grid)
     {
@@ -40,9 +41,6 @@ public class HumanPlayer extends Player
                 {
                     throw  new InputMismatchException();
                 }
-
-                //Check for SOS sequences
-                //int numberOfSequences = isWinningMove(row - 1, col - 1, grid);
 
                 //If grid finds a winner
                 if(grid.someoneHasWon())

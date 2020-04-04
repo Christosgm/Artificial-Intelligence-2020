@@ -14,6 +14,7 @@ public class SOSGame
         }
     }
 
+    //Returns the name of the winner if the move played is a winning move
     private static String play(Player player, Grid grid)
     {
         System.out.println(player.getName() + " play!");
