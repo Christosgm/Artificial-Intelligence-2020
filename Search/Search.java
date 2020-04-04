@@ -55,6 +55,9 @@ class Search{
     // variables accordingly
     private void correctInputHandler(){
         Scanner input = new Scanner(System.in);
+        System.out.println("Give me the starting sequence or a number k to"+
+        "generate random sequence of length 2*k+1:");
+        System.out.println("(need equal number of \"A\"s and \"M\"s and a dash)");
         do {
             if(input.hasNextInt()) {
                 whiteBalls = input.nextInt();
@@ -140,33 +143,30 @@ class Search{
         return children;
     }
 
-    // Adds extra cost to the children nodes after calculating the heuristic
+    // Adds extra cost to the children nodes according to the heuristic
     private void addHeuristic(Node childNode){
-        childNode.increaseCost(calculateWrongPositions(childNode.getCurrentOutput()));
-    }
-
-    // Part of the Heuristic
-    // TODO it is too simple done quicly. Need to make a better one
-    private int calculateWrongPositions(String currentSequence){
         int extraValue = 0;
         for (int i = 0 ; i < 2*whiteBalls+1 ; i++)
-            if ( i < whiteBalls && currentSequence.charAt(i) != 'M')
+            if ( i < whiteBalls && childNode.getCurrentOutput().charAt(i) != 'M')
                 extraValue += whiteBalls - i;
-            else if (currentSequence.charAt(i) == 'M')
-                extraValue += i - whiteBalls -1;
-        return extraValue;
+            else if (i > whiteBalls && childNode.getCurrentOutput().charAt(i) == 'M')
+                extraValue += i - whiteBalls;
+        childNode.increaseCost(extraValue);
     }
 
+
+    // Swaps the positions of first and second index
     private String swapLetters(String input, int firstIndex, int secondIndex){
         return input.substring(0, firstIndex) + input.charAt(secondIndex) +
         input.substring(firstIndex+1, secondIndex) + input.charAt(firstIndex) +
         input.substring(secondIndex+1, input.length());
     }
 
+    // The regex of a final state
     private boolean checkSolution(String currentSolution){
         return currentSolution.matches("[M]*[A\\-]*A");
     }
-
+    // Starts a search using UCS
     private void uniformCostSearch(){
         System.out.println("=================================================");
         System.out.println("Uniform Cost Search");
@@ -174,6 +174,7 @@ class Search{
         search(0);
     }
 
+    // Starts a search using the A* algorithm
     private void AStar(){
         System.out.println("=================================================");
         System.out.println("A* Algorithm");
@@ -198,7 +199,7 @@ class Search{
         }
     }
 
-    // Takes care of the whole searching process
+    // Starts the search and prints the results after it ends
     private void search(int mode){
         expandedNodes = 0;
         Node searchResult = searchAlgorithm(mode);
@@ -222,7 +223,13 @@ class Search{
 
     public static void main(String[] args) {
         Search search = new Search();
+        long ucsStartTime = System.nanoTime();
         search.uniformCostSearch();
+        long aStarStartTime = System.nanoTime();
         search.AStar();
+        long finalTime = System.nanoTime();
+        System.out.println("UCS total runtime was: "+ (aStarStartTime - ucsStartTime));
+        System.out.println("A* total runtime was: "+ (finalTime - aStarStartTime));
+        System.out.println("Difference: "+ (2*aStarStartTime - ucsStartTime - finalTime));
     }
 }
