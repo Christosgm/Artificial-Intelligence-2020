@@ -8,15 +8,14 @@ public class SOSGame
     {
         if(name.equals("minimax") || name.equals("cpu"))
         {
-            System.out.println("<---PRESS ENTER TO CONTINUE--->");
+            System.out.println("<---PRESS ENTER FOR COMPUTER TO PLAY--->");
             Scanner input = new Scanner(System.in);
             input.nextLine();
         }
     }
 
     //Returns the name of the winner if the move played is a winning move
-    private static String play(Player player, Grid grid)
-    {
+    private static String play(Player player, Grid grid) throws IOException {
         System.out.println(player.getName() + " play!");
 
         grid.print();//Print grid
@@ -52,6 +51,7 @@ public class SOSGame
             Player player1 = playerFactory.createPlayer(commands[1]);
             Player player2 = playerFactory.createPlayer(commands[2]);
 
+            //char[][] board = {{'O', 'O', 'S'}, {'O', 'S', ' '}, {'S', 'O', ' '}};
             Grid grid = new Grid();
 
             int turn = 1;

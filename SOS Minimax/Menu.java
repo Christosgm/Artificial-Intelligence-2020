@@ -52,8 +52,8 @@ public class Menu
         }
         else
         {
-            System.out.print("\033[H\033[2J");//Clear screen on other Systems
-            System.out.flush();
+          System.out.print("\033[H\033[2J");//Clear screen on other Systems
+          System.out.flush();
         }
     }
 
@@ -84,6 +84,7 @@ public class Menu
         return (!commands[0].equals("exit") && !commands[0].equals("help")) || commands.length == 1;
     }
 
+    //Prints help
     private void printHelp()
     {
         System.out.println(
@@ -98,8 +99,8 @@ public class Menu
 
                         "VALID COMMANDS\n" +
                         "start <name_of_p1> <name_of_p2> : Starts a game with <name_of_p1> being the first player.\n"+
-                        "                                  minimax :  computer plays using the minimax algorithm.\n"+
-                        "                                  cpu     :  computer plays at random.\n"+
+                        "                                  minimax : computer plays using the minimax algorithm.\n"+
+                        "                                  cpu     : computer plays at random.\n"+
                         "exit : Exits the program.\n" +
                         "help : Shows info.\n"
         );

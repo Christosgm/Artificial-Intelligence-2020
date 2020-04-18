@@ -4,7 +4,6 @@ public class Grid
 {
     private char[][] grid;
 
-    //Creates starting grid with 'O' at 1 0 or 1 2 selected at random
     public Grid()
     {
         //Initiate the grid
@@ -31,7 +30,6 @@ public class Grid
 
     }
 
-    //Create grid from array.
     public Grid(char[][] grid)
     {
         this.grid = new char[3][3];
@@ -44,7 +42,6 @@ public class Grid
         }
     }
 
-    //Puts move into grid and returns true if placed correctly
     public boolean put(String player, int row, int col, char move)
     {
         //If HumanPlayer is playing check for coordinates validity
@@ -56,7 +53,7 @@ public class Grid
             }
         }
 
-        //If cell is full, you can't put symbol inside
+        //If cell is full, you can't put symbol inside 
         if(grid[row][col] != ' ')
         {
             return false;
@@ -67,7 +64,6 @@ public class Grid
         return true;
     }
 
-    //Checks if the game is a draw
     public boolean isDraw()
     {
         int countNonBlank = 0;
@@ -91,7 +87,7 @@ public class Grid
         return grid;
     }
 
-    //Checks if someone has won
+    //Check if someone has won
     public boolean someoneHasWon()
     {
 
@@ -124,7 +120,7 @@ public class Grid
     }
 
 
-    //Prints the grid
+    //Print the grid
     public void print()
     {
         System.out.println("\n   -1-2-3-");
