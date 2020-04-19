@@ -8,7 +8,7 @@ public class SOSGame
     {
         if(name.equals("minimax") || name.equals("cpu"))
         {
-            System.out.println("<---PRESS ENTER FOR COMPUTER TO PLAY--->");
+            System.out.print("<---PRESS ENTER FOR COMPUTER TO PLAY--->");
             Scanner input = new Scanner(System.in);
             input.nextLine();
         }
@@ -16,9 +16,9 @@ public class SOSGame
 
     //Returns the name of the winner if the move played is a winning move
     private static String play(Player player, Grid grid) throws IOException {
+        grid.print();//Print grid
         System.out.println(player.getName() + " play!");
 
-        grid.print();//Print grid
         if(player.play(grid))//Play and if player 2 wins
         {
             return player.getName();

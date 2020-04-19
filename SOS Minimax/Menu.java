@@ -52,7 +52,7 @@ public class Menu
         }
         else
         {
-          System.out.print("\033[H\033[2J");//Clear screen on other Systems
+          System.out.print("\033[H\033[2J");//Clear screen using ANSI escape codes
           System.out.flush();
         }
     }
@@ -105,5 +105,4 @@ public class Menu
                         "help : Shows info.\n"
         );
     }
-
 }

@@ -15,5 +15,5 @@ public abstract class Player
         return name;
     }
 
-    abstract boolean play(Grid grid) throws IOException;//Returns true if the move played is a winning move
+    abstract boolean play(Grid grid);//Returns true if the move played is a winning move
 }

@@ -35,10 +35,7 @@ public class Grid
         this.grid = new char[3][3];
         for(int i = 0; i < grid.length; i++)
         {
-            for(int j = 0; j < grid.length; j++)
-            {
-                this.grid[i][j] = grid[i][j];
-            }
+            System.arraycopy(grid[i], 0, this.grid[i], 0, grid.length);
         }
     }
 
