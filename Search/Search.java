@@ -5,20 +5,19 @@ import java.util.Random;
 
 
 class Search{
-    //The first sequence  and the number of white balls(black is the same)
-    //Also keep the numbers of nodes that were expanded
-    private String startingSequence;
-    private int whiteBalls;
-    private int expandedNodes;
 
-    // Node of the search tree that we are expanding
+    private String startingSequence; // The state we start the search from
+    private int whiteBalls; // The number of white balls (=black balls)
+    private int expandedNodes; // How many nodes the current search has expanded
+
+    // Node of the search tree
     class Node{
-        //A string showing ball positions, int for the cost and the parent node
-        private String currentOutput;
-        private int nodeG;
-        private int nodeH;
-        private Node parent;
+        private String currentOutput; // Current state
+        private int nodeG; // Value of g(n) (cost from root until here)
+        private int nodeH; // Value of h(n) (cost heuristic gives)
+        private Node parent; // The parent node
 
+        // Constructor - Accessors
         public Node(String currentOutput,int currentCost, Node parent){
             this.currentOutput = currentOutput;
             this.nodeG = currentCost;
@@ -28,7 +27,7 @@ class Search{
         public String getCurrentOutput(){
             return currentOutput;
         }
-
+        // If we use ucs, nodeH is 0
         public int getCurrentCost(){
             return nodeG + nodeH;
         }
@@ -36,9 +35,9 @@ class Search{
         public Node getParent(){
             return parent;
         }
-
-        public void increaseCost(int increment){
-            nodeH += increment;
+        // Mutator for h(n)
+        public void setNodeH(int increment){
+            nodeH = increment;
         }
 
         public int getNodeG(){
@@ -59,10 +58,12 @@ class Search{
         "generate random sequence of length 2*k+1:");
         System.out.println("(need equal number of \"A\"s and \"M\"s and a dash)");
         do {
+            // Either get n and make a random startingSequence(length 2n+1)
             if(input.hasNextInt()) {
                 whiteBalls = input.nextInt();
                 randomStart();
             }else{
+                // or get the startingSequence and check if it is valid
                 startingSequence = input.nextLine();
                 countLetters();
                 whiteBalls = startingSequence.length()/2;
@@ -70,12 +71,14 @@ class Search{
         }while (!startingSequence.matches("[AM]*-[AM]*") || !countLetters());
     }
 
+    // Checks if the input has equal As and Ms and a dash
     private boolean countLetters(){
         Pattern letterM = Pattern.compile("M");
         Pattern letterA = Pattern.compile("A");
         Matcher matcherForM = letterM.matcher(startingSequence);
         Matcher matcherForA = letterA.matcher(startingSequence);
         int countA = 0; int countM = 0;
+        // Firstly count numbers of A, and the numbers of M
         while (matcherForA.find())
             countA++;
         while (matcherForM.find())
@@ -83,23 +86,34 @@ class Search{
         return countM == countA;
     }
 
-    // Creates a random starting sequence of given size
+    // Creates a random starting sequence of given size (2n + 1)
+    // Note: this seems complicated but works... given time it might change
+    // to something more readable
     private void randomStart(){
+        // Init stuff
         Random rand = new Random();
         startingSequence = "";
         int AorM;
         int blackCounter = whiteBalls;
         int whiteCounter = whiteBalls;
+        // Random place the dash will go
         int dashIndex = rand.nextInt(2*whiteBalls+1);
+        // while we havent placed all balls and the space
         while (blackCounter > 0 || whiteCounter > 0 || dashIndex >= 0 ){
+            // Time to place the dash
             if (dashIndex == 0){
                 startingSequence += "-";
                 dashIndex--;
             }
+            // else reduce the loops needed until placing the dash
             else dashIndex --;
+            // Randomly decide to place A or M next
             AorM = rand.nextInt(2);
+            // If we placed all white or black balls make sure other colour
+            // will be placed
             if (blackCounter == 0) AorM = 0;
             if (whiteCounter == 0) AorM = 1;
+            // Place the ball
             if (AorM == 0 && whiteCounter > 0 ){
                 startingSequence += "A";
                 whiteCounter--;
@@ -129,7 +143,11 @@ class Search{
         int emptyIndex = parent.getCurrentOutput().indexOf('-');
         int leftIndex = emptyIndex;
         int rightIndex = emptyIndex;
+        // Only possible to move positions <= whiteBall number
         for (int i = 1; i <= whiteBalls; i++){
+            // From the dash position going towards the start and the end of the
+            // string, if we are not out of bounds make a child by swapping the
+            // dash with a ball and calculating its cost (parentCost + moveCost)
             if (--leftIndex >= 0 ) children.add(new Node(swapLetters(
             parent.getCurrentOutput(),leftIndex,emptyIndex),emptyIndex-leftIndex+
             parent.getNodeG(),parent));
@@ -137,6 +155,7 @@ class Search{
                 children.add(new Node(swapLetters(parent.getCurrentOutput(),
                 emptyIndex,rightIndex),rightIndex-emptyIndex+parent.getNodeG(),parent));
         }
+        // If we use A* for every child calculate the Heuristic cost
         if (mode == 1)
             for (Node child:children)
                 addHeuristic(child);
@@ -146,16 +165,23 @@ class Search{
     // Adds extra cost to the children nodes according to the heuristic
     private void addHeuristic(Node childNode){
         int extraValue = 0;
+        // Go through the whole string
         for (int i = 0 ; i < 2*whiteBalls+1 ; i++)
+            // For every non-M character until middle-1 calculate its distance
+            // from the middle
             if ( i < whiteBalls && childNode.getCurrentOutput().charAt(i) != 'M')
                 extraValue += whiteBalls - i;
+            // For every M character after middle-1 calculate its distance from
+            // the middle
             else if (i > whiteBalls && childNode.getCurrentOutput().charAt(i) == 'M')
                 extraValue += i - whiteBalls;
-        childNode.increaseCost(extraValue);
+        // These two distances for every postition gives us cost to get all M
+        // characters to the leftMost spaces if every move was allowed
+        childNode.setNodeH(extraValue);
     }
 
 
-    // Swaps the positions of first and second index
+    // Swaps the positions of first and second index in a string
     private String swapLetters(String input, int firstIndex, int secondIndex){
         return input.substring(0, firstIndex) + input.charAt(secondIndex) +
         input.substring(firstIndex+1, secondIndex) + input.charAt(firstIndex) +
@@ -166,6 +192,7 @@ class Search{
     private boolean checkSolution(String currentSolution){
         return currentSolution.matches("[M]*[A\\-]*A");
     }
+
     // Starts a search using UCS
     private void uniformCostSearch(){
         System.out.println("=================================================");
@@ -182,31 +209,42 @@ class Search{
         search(1);
     }
 
-    // Basic skeleton of a search
+    // Basic skeleton of a search based on 2_blind_search.pdf page 18
     private Node searchAlgorithm(int mode){
         Node searchingNode;
         ArrayList<Node> searchSpace = new ArrayList<>();
         ArrayList<String> closedSet = new ArrayList<>();
+        // 1. Add stating state to seachSpace
         searchSpace.add(new Node(startingSequence,0,null));
         while (true){
+            // 2. If searchSpace is empty stop
             if (searchSpace.size() == 0) return null;
+            // 3. Get the node with the smallest cost
             searchingNode = extractMin(searchSpace);
+            // 4. If it is in the closed set go back to 2
             if (closedSet.contains(searchingNode.getCurrentOutput())) continue;
+            // 5. If this is accepted final state, return it
             if (checkSolution(searchingNode.getCurrentOutput()))
                 return searchingNode;
+            // 6. Create the childen with the accepted transitions
+            // 7. Add the children to the seachSpace
             searchSpace.addAll(findAllChildren(searchingNode,mode));
+            // 8. Add parent node to the closedSet
             closedSet.add(searchingNode.getCurrentOutput());
+            // 9. Go back to 2
         }
     }
 
     // Starts the search and prints the results after it ends
     private void search(int mode){
         expandedNodes = 0;
+        // Searching part
         Node searchResult = searchAlgorithm(mode);
         if (searchResult == null){
             System.out.println("No possible solution found");
             return;
         }
+        // Printing path
         System.out.println("One final positioning of the balls with cost "+
         searchResult.getNodeG() + " is : "+ searchResult.getCurrentOutput());
         System.out.println("Total nodes expanded: " + expandedNodes);
@@ -223,10 +261,13 @@ class Search{
 
     public static void main(String[] args) {
         Search search = new Search();
+        // Start the ucs search
         long ucsStartTime = System.nanoTime();
         search.uniformCostSearch();
+        // Start the A* search
         long aStarStartTime = System.nanoTime();
         search.AStar();
+        // Print the times the algorithms took to run
         long finalTime = System.nanoTime();
         System.out.println("UCS total runtime was: "+ (aStarStartTime - ucsStartTime));
         System.out.println("A* total runtime was: "+ (finalTime - aStarStartTime));
