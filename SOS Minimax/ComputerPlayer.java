@@ -31,7 +31,7 @@ public class ComputerPlayer extends Player
             MiniMax  mm = new MiniMax();//Create the "brain"
             char[] nextMove = mm.nextMove(grid);//Find next move using minimax
             grid.put("minimax", nextMove[0] - '0', nextMove[1] - '0', nextMove[2]);//Put move into grid
-            System.out.println("Cases tested: " + MiniMax.numberOfChildren);
+            //System.out.println("Cases tested: " + MiniMax.numberOfChildren);
         }
 
         return grid.someoneHasWon();//If someone won that is you

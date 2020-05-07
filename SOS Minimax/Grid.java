@@ -3,7 +3,7 @@ import java.util.Random;
 public class Grid
 {
     private char[][] grid;
-
+    
     public Grid()
     {
         //Initiate the grid
@@ -120,16 +120,16 @@ public class Grid
     //Print the grid
     public void print()
     {
-        System.out.println("\n   -1-2-3-");
+        System.out.println(" -1-2-3-");
         for(int row = 0; row < 3; row++)
         {
-            System.out.print((row+1)+" | ");
+            System.out.print((row+1)+"|");
             for(int col = 0; col < 3; col++)
             {
-                System.out.print(grid[row][col] + " ");
+                System.out.print(grid[row][col] + "|");
             }
-            System.out.println("|");
+            System.out.println();
         }
-        System.out.println("   -------\n");
+        System.out.println(" -------");
     }
 }

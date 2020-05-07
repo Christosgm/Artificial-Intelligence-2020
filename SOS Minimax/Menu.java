@@ -4,6 +4,8 @@ import java.util.Scanner;
 
 public class Menu
 {
+    private static final String ANSI_CLEAR = "\033[H\033[2J";//ANSI escape code for clear
+    
     //Enter the command to do stuff
     public String[] enterCommand() throws IOException, InterruptedException
     {
@@ -52,7 +54,7 @@ public class Menu
         }
         else
         {
-          System.out.print("\033[H\033[2J");//Clear screen using ANSI escape codes
+          System.out.print(ANSI_CLEAR);//Clear screen using ANSI escape codes
           System.out.flush();
         }
     }
@@ -92,10 +94,10 @@ public class Menu
                         "Players take turns to add either an \"S\" or an \"O\" to any square,\n" +
                         "with no requirement to use the same letter each turn.\n\n" +
                         "The object of the game is for each player to attempt to create the\n" +
-                        "straight sequence S-O-S among connected squares either diagonally,\n" +
+                        "straight sequence SOS among connected squares either diagonally,\n" +
                         "horizontally, or vertically.\n\n" +
-                        "If a player succeeds in creating a SOS, he is declared the winner.\n\n" +
-                        "If the board fills, without any SOS then the game is considered a draw.\n\n" +
+                        "If a player succeeds in creating an SOS sequence, he is declared the winner.\n\n" +
+                        "If the board fills, without any SOS sequence then the game is considered a draw.\n\n" +
 
                         "VALID COMMANDS\n" +
                         "start <name_of_p1> <name_of_p2> : Starts a game with <name_of_p1> being the first player.\n"+
