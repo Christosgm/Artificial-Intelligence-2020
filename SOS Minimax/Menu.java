@@ -16,7 +16,7 @@ public class Menu
             try
             {
                 //Enter the command
-                System.out.print("Input command(type help for info): ");
+                System.out.print("Input command (type help for info): ");
                 Scanner input = new Scanner(System.in);
                 commands = input.nextLine().split(" ");
 
@@ -69,6 +69,12 @@ public class Menu
 
         //First arg can only be start, exit or help
         if(!commands[0].equals("start")  && !commands[0].equals("exit")  && !commands[0].equals("help"))
+        {
+            return false;
+        }
+
+        //If start is chosen then player names must be initialized
+        if(commands[0].equals("start") && commands.length != 3)
         {
             return false;
         }

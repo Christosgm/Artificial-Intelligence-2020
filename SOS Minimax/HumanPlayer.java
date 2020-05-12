@@ -17,7 +17,7 @@ public class HumanPlayer extends Player
         //Ends if coordinates are valid
         do
         {
-            System.out.print("Enter the coordinates of your position and your move (ex. 2 2 S): ");
+            System.out.print(":> ");
             try
             {
                 //Enter coordinates and symbol

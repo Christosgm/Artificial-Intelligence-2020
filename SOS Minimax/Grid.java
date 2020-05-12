@@ -118,7 +118,7 @@ public class Grid
 
 
     //Print the grid
-    public void print()
+    public void print(String playerName)
     {
         System.out.println(" -1-2-3-");
         for(int row = 0; row < 3; row++)
@@ -127,6 +127,12 @@ public class Grid
             for(int col = 0; col < 3; col++)
             {
                 System.out.print(grid[row][col] + "|");
+                if(row == 1 && col == 2 && !playerName.equals(""))
+                {
+                    System.out.print("    " + playerName + "'s turn");
+                }
+                
+                
             }
             System.out.println();
         }

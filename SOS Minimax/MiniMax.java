@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class MiniMax
 {
-    //public static int numberOfChildren = 0; //Counts the tree nodes of a given state
+    public static int numberOfChildren; //Counts the tree nodes of a given state
 
     private static class Node
     {
@@ -36,7 +36,7 @@ public class MiniMax
                         board[i][j] = 'O';
                         children.add( new Node(new Grid(board)));
                         board[i][j] = ' ';
-                        //MiniMax.numberOfChildren+=2;
+                        MiniMax.numberOfChildren+=2;
                     }
                 }
             }
@@ -68,8 +68,7 @@ public class MiniMax
 
     public char[] nextMove(Grid grid)
     {
-        //numberOfChildren = 0;
-
+        numberOfChildren = 0;
         //Make starting decision node
         Node state = new Node(grid);
         Node bestState = null;

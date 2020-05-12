@@ -8,21 +8,22 @@ public class Main
     {
         if(name.equals("minimax") || name.equals("cpu"))
         {
-            System.out.print("<---PRESS ENTER FOR COMPUTER TO PLAY--->");
+            System.out.print(":> . . .");
             Scanner input = new Scanner(System.in);
             input.nextLine();
         }
     }
 
     //Returns the name of the winner if the move played is a winning move
-    private static String play(Player player, Grid grid) throws IOException {
-        grid.print();//Print grid
-        System.out.println(player.getName() + " play!");
-        stopFlow(player.getName());
-        if(player.play(grid))//Play and if player 2 wins
+    private static String play(Player player, Grid grid)
+    {
+        grid.print(player.getName());//Print grid
+        if(player.play(grid))//Play and if player wins
         {
+            stopFlow(player.getName());
             return player.getName();
         }
+        stopFlow(player.getName());
         return "";
     }
 
@@ -58,7 +59,7 @@ public class Main
             while(!grid.isDraw() && !grid.someoneHasWon())//While game is not a draw or there is not a winner
             {
                 menu.clrScr();
-                System.out.println("-TURN #" + turn + "-");
+                System.out.println("-Turn #" + turn + "-");
                 if(turn%2 == 1)//If it is player 1 turn
                 {
                     winner = play(player1, grid);
@@ -71,15 +72,15 @@ public class Main
             }
 
             menu.clrScr();
-            System.out.println("-TURN #" + (turn - 1) + "-");
-            grid.print();
+            System.out.println("-Turn #" + (turn - 1) + "-");
+            grid.print("");
             if(winner.equals(""))
             {
-                System.out.println("Draw!\n");
+                System.out.println("Draw!");
             }
             else
             {
-                System.out.println(winner + " wins!\n");
+                System.out.println(winner + " wins!");
             }
 
         }

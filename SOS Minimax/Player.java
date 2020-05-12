@@ -1,8 +1,6 @@
-import java.io.IOException;
-
 public abstract class Player
 {
-    private String name;//Player name
+    private final String name;//Player name
 
     public Player(String name)
     {
