@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class Heuristic
 {
-    public static int heuristic(String permutation)
+    public int heuristic(String permutation)
     {
         ArrayList<Integer> left = new ArrayList<>();
 
@@ -57,7 +57,7 @@ public class Heuristic
     }
 
     //Merging of two arrays routine
-    private static ArrayList<Integer> merge(ArrayList<Integer> a, ArrayList<Integer> b)
+    private ArrayList<Integer> merge(ArrayList<Integer> a, ArrayList<Integer> b)
     {
         ArrayList<Integer> merged = new ArrayList<>();
         while(!a.isEmpty() && !b.isEmpty())
