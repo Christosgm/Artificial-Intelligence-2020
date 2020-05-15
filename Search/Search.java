@@ -273,7 +273,7 @@ class Search{
         Search search = new Search();
         // Start the ucs search
         long ucsStartTime = System.nanoTime();
-        //search.uniformCostSearch();
+        search.uniformCostSearch();
         // Start the A* search
         long aStarStartTime = System.nanoTime();
         search.AStar();
