@@ -1,0 +1,4 @@
+Permutation Actual Heuristic
+MMMA-AA 0 1
+MMMAA-A 0 2
+MMMAAA- 1 3
