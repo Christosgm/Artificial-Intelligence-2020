@@ -171,8 +171,10 @@ class Search{
         for (int i = 0 ; i < 2*whiteBalls+1 ; i++)
             // Calculate distances of letters in not accepted positions
             // Add that twice to the heuristic value
-            if ( i < whiteBalls && childNode.getCurrentOutput().charAt(i) == 'A')
-                extraValue += whiteBalls - i;
+            if ( i < whiteBalls && childNode.getCurrentOutput().charAt(i) == 'A'){
+                lastValue = whiteBalls - i;
+                extraValue += lastValue;
+            }
             else if (i > whiteBalls && childNode.getCurrentOutput().charAt(i) == 'M'){
                 lastValue = i - whiteBalls;
                 extraValue += lastValue;
@@ -181,7 +183,7 @@ class Search{
         // Also add the distance of the empty spot to the middle
         if (emptyIndex >= whiteBalls && extraValue > 0)
             extraValue += emptyIndex - whiteBalls;
-        else
+        else if (extraValue > 0)
             extraValue += whiteBalls- emptyIndex;
         // Set the heursitic cost of the given node
         childNode.setNodeH(extraValue-lastValue);
@@ -197,7 +199,7 @@ class Search{
 
     // The regex of a final state
     private boolean checkSolution(String currentSolution){
-        return currentSolution.matches("[M]*[A\\-]*A");
+        return currentSolution.matches("[M\\-]*[A\\-]*A");
     }
 
     // Starts a search using UCS
@@ -271,7 +273,7 @@ class Search{
         Search search = new Search();
         // Start the ucs search
         long ucsStartTime = System.nanoTime();
-        search.uniformCostSearch();
+        //search.uniformCostSearch();
         // Start the A* search
         long aStarStartTime = System.nanoTime();
         search.AStar();
