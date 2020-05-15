@@ -172,11 +172,12 @@ class Search{
             // Calculate distances of letters in not accepted positions
             // Add that twice to the heuristic value
             if ( i < whiteBalls && childNode.getCurrentOutput().charAt(i) == 'A')
-                extraValue += (whiteBalls - i)*2;
+                extraValue += whiteBalls - i;
             else if (i > whiteBalls && childNode.getCurrentOutput().charAt(i) == 'M'){
                 lastValue = i - whiteBalls;
-                extraValue += (lastValue)*2;
+                extraValue += lastValue;
             }
+        extraValue *= 2;
         // Also add the distance of the empty spot to the middle
         if (emptyIndex >= whiteBalls && extraValue > 0)
             extraValue += emptyIndex - whiteBalls;
