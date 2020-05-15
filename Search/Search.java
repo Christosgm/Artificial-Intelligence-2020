@@ -159,71 +159,30 @@ class Search{
         if (mode == 1)
             for (Node child:children)
                 addHeuristic(child);
-        else if (mode == 2)
-            for (Node child:children)
-                newHeuristic(child);
         return children;
     }
 
     // Adds extra cost to the children nodes according to the heuristic
     private void addHeuristic(Node childNode){
         int extraValue = 0;
+        int emptyIndex = childNode.getCurrentOutput().indexOf('-');
+        int lastValue = 0;
         // Go through the whole string
         for (int i = 0 ; i < 2*whiteBalls+1 ; i++)
-            // For every non-M character until middle-1 calculate its distance
-            // from the middle
-            if ( i < whiteBalls && childNode.getCurrentOutput().charAt(i) != 'M')
-                extraValue += whiteBalls - i;
-            // For every M character after middle-1 calculate its distance from
-            // the middle
-            else if (i > whiteBalls && childNode.getCurrentOutput().charAt(i) == 'M')
-                extraValue += i - whiteBalls;
-        // These two distances for every postition gives us cost to get all M
-        // characters to the leftMost spaces if every move was allowed
-        childNode.setNodeH(extraValue);
-    }
-
-    private void newHeuristic(Node childNode){
-        int extraValue = 0;
-        int emptyIndex = childNode.getCurrentOutput().indexOf('-');
-
-        int lastValue = 0;
-        for (int i = 0 ; i < 2*whiteBalls+1 ; i++)
-
+            // Calculate distances of letters in not accepted positions
+            // Add that twice to the heuristic value
             if ( i < whiteBalls && childNode.getCurrentOutput().charAt(i) == 'A')
-            extraValue += (whiteBalls - i)*2;
-
-            else if (i >= whiteBalls && childNode.getCurrentOutput().charAt(i) == 'M'){
-            lastValue = i - whiteBalls;
-            extraValue += (lastValue)*2;
-
-        }
-        if (emptyIndex >= whiteBalls && extraValue > 0) extraValue += emptyIndex - whiteBalls;
-        else extraValue += whiteBalls- emptyIndex;
-
-        /*int[] left = new  int[whiteBalls];
-        int leftCount = 0;
-        int[] right = new int[whiteBalls];
-        int rightCount = 0;
-
-        for (int i = 0 ; i < 2*whiteBalls+1 ; i++){
-            if ( i < whiteBalls && childNode.getCurrentOutput().charAt(i) == 'A')
-                left[leftCount++] = i;
-            else if (i >= whiteBalls && childNode.getCurrentOutput().charAt(i) == 'M')
-                right[rightCount++] = i;
-        }
-        int full_counter = leftCount + rightCount; //Number of letters in wrong positions
-        int new_right = 0;
-        while(full_counter>0){
-            if (emptyIndex >= whiteBalls){
-                extraValue +=  (emptyIndex - left[--leftCount] );
-                emptyIndex = left[leftCount];
-            }else{
-                extraValue += (right[new_right] - emptyIndex);
-                emptyIndex = right[new_right++];
+                extraValue += (whiteBalls - i)*2;
+            else if (i > whiteBalls && childNode.getCurrentOutput().charAt(i) == 'M'){
+                lastValue = i - whiteBalls;
+                extraValue += (lastValue)*2;
             }
-            full_counter--;
-        }*/
+        // Also add the distance of the empty spot to the middle
+        if (emptyIndex >= whiteBalls && extraValue > 0)
+            extraValue += emptyIndex - whiteBalls;
+        else
+            extraValue += whiteBalls- emptyIndex;
+        // Set the heursitic cost of the given node
         childNode.setNodeH(extraValue-lastValue);
     }
 
@@ -256,12 +215,6 @@ class Search{
         search(1);
     }
 
-    private void AStarNew(){
-        System.out.println("=================================================");
-        System.out.println("A* Algorithm (new heuristic)");
-        System.out.println("=================================================");
-        search(2);
-    }
 
     // Basic skeleton of a search based on 2_blind_search.pdf page 18
     private Node searchAlgorithm(int mode){
@@ -321,14 +274,11 @@ class Search{
         // Start the A* search
         long aStarStartTime = System.nanoTime();
         search.AStar();
-        long aStarNewStartTime = System.nanoTime();
-        search.AStarNew();
         // Print the times the algorithms took to run
         long finalTime = System.nanoTime();
-        System.out.println("UCS total runtime was: "+ (aStarStartTime - ucsStartTime));
-        System.out.println("A* total runtime was: "+ (aStarNewStartTime - aStarStartTime));
-        System.out.println("A* new total runtime was: "+ (finalTime - aStarNewStartTime));
-        System.out.println("Difference A* and UCS: "+ (2*aStarStartTime - ucsStartTime - aStarNewStartTime));
-        System.out.println("Difference A*new and A*: "+ (2*aStarNewStartTime - aStarStartTime - finalTime));
+        System.out.println("Algorithm Runtime(nanoseconds):\n");
+        System.out.println("\tUCS: "+ (aStarStartTime - ucsStartTime));
+        System.out.println("\tA*: "+ (finalTime - aStarStartTime));
+        System.out.println("\nDifference between A* and UCS: "+ (2*aStarStartTime - ucsStartTime - finalTime));
     }
 }
