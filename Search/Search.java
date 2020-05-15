@@ -198,8 +198,8 @@ class Search{
             extraValue += (lastValue)*2;
 
         }
-        if (emptyIndex <whiteBalls) extraValue += whiteBalls- emptyIndex;
-        else extraValue += emptyIndex - whiteBalls;
+        if (emptyIndex >= whiteBalls && extraValue > 0) extraValue += emptyIndex - whiteBalls;
+        else extraValue += whiteBalls- emptyIndex;
 
         /*int[] left = new  int[whiteBalls];
         int leftCount = 0;
